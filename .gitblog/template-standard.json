@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "0.1.0",
+  "sourceTemplate": "gitblogapp/svelte-gitblog-template",
+  "sourceCommit": "8e341bac3096731e14891a867bb16ab20ba70fd6",
+  "framework": "vanilla",
+  "adaptations": [
+    "Plain HTML shell, JavaScript static renderer and CSS theme",
+    "Framework-free browser enhancements; shared GitBlog client protocols",
+    "Plain GitBlog design: neutral palette, text navigation, readable article list and original SVG icons",
+    "Public-only view data and static article text before JavaScript",
+    "Standard authoring, translations, TTS, images and dual Pages workflows",
+    "Official service registration stays gated until real template catalog support"
+  ],
+  "sourceVersion": "1.14.4",
+  "packages": {
+    "version": "0.1.1",
+    "repository": "gitblogapp/gitblog-template-packages"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "repository": "gitblogapp/vanilla-gitblog-template",
+  "developmentRepository": "gitblogapp/vanilla-gitblog-template-dev",
+  "minimumVersion": "1.0.0",
+  "files": [
+    ".env.example",
+    ".env.production",
+    ".gitignore",
+    ".pages.yml",
+    "package.json",
+    "package-lock.json"
+  ],
+  "directories": [
+    "src",
+    "static",
+    "content",
+    "docs/gitblog",
+    "scripts"
+  ],
+  "metadata": [
+    ".gitblog/authoring.json",
+    ".gitblog/update-policy.json",
+    ".gitblog/user-instructions.md",
+    ".gitblog/template-standard.json"
+  ],
+  "workflows": [
+    "deploy.yml",
+    "hub-discussion-comment.yml",
+    "post-history.yml",
+    "sync-hub.yml"
+  ],
+  "omitDependencies": [
+    "@playwright/test",
+    "fast-xml-parser",
+    "fast-xml-validator",
+    "prettier",
+    "prettier-plugin-astro",
+    "robots-parser"
+  ],
+  "excludeFiles": [
+    "scripts/browser-check.js",
+    "scripts/verify-template.js",
+    "scripts/verify-reference.js",
+    "scripts/preservation.js"
+  ],
+  "scripts": {
+    "check": "npm run author:check && npm run posts:ids:check && npm run taxonomy:check && npm run check:site",
+    "check:site": "node scripts/check-site.mjs"
+  }
+}

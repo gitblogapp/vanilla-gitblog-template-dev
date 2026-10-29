@@ -1,0 +1,102 @@
+const en = {
+  journal: "All articles",
+  search: "Search",
+  all: "All topics",
+  latest: "Latest articles",
+  topics: "Topics",
+  overview: "Overview",
+  library: "THE COLLECTION",
+  recent: "RECENT ARTICLES",
+  explore: "Explore the collection",
+  read: "Read article",
+  toc: "On this page",
+  minute: "min read",
+  comments: "Discussion",
+  searchTitle: "Search the collection",
+  searchHint: "Find a thought, a guide, or something worth revisiting.",
+  placeholder: "Search articles\u2026",
+  empty: "No matching articles. Try another search.",
+  searchStart: "Search by title, content, or topic.",
+  results: "results",
+  theme: "Toggle color theme",
+  skip: "Skip to content",
+  updated: "Updated",
+  noPosts: "A new chapter starts here.",
+  emptyIntro:
+    "The first article is on its way. Come back soon for ideas, guides, and things learned along the way.",
+  about: "About this space",
+  rss: "Subscribe via RSS",
+  rssDescription: "New articles, delivered to your reader.",
+  error: "Search is unavailable right now. Please try again.",
+  menu: "Open navigation",
+  close: "Close navigation",
+  previous: "Previous article",
+  next: "Next article",
+  members: "Members only",
+  memberPrompt: "Sign in below to read this members-only article.",
+  notFound: "This page could not be found.",
+  back: "Back to articles",
+  language: "Language",
+};
+const ko = {
+  journal: "\uBAA8\uB4E0 \uAE00",
+  search: "\uAC80\uC0C9",
+  all: "\uC804\uCCB4 \uD1A0\uD53D",
+  latest: "\uCD5C\uC2E0 \uAE00",
+  topics: "\uD1A0\uD53D",
+  overview: "\uC2DC\uC791 \uD398\uC774\uC9C0",
+  library: "\uAE00 \uBAA8\uC74C",
+  recent: "\uCD5C\uADFC \uAE00",
+  explore: "\uD1A0\uD53D\uBCC4\uB85C \uC0B4\uD3B4\uBCF4\uAE30",
+  read: "\uAE00 \uC77D\uAE30",
+  toc: "\uC774 \uAE00\uC758 \uBAA9\uCC28",
+  minute: "\uBD84 \uC77D\uAE30",
+  comments: "\uC758\uACAC \uB098\uB204\uAE30",
+  searchTitle: "\uAE00 \uBAA8\uC74C \uAC80\uC0C9",
+  searchHint:
+    "\uAD81\uAE08\uD55C \uC0DD\uAC01, \uAC00\uC774\uB4DC, \uB2E4\uC2DC \uC77D\uACE0 \uC2F6\uC740 \uC774\uC57C\uAE30\uB97C \uCC3E\uC544\uBCF4\uC138\uC694.",
+  placeholder: "\uAE00 \uAC80\uC0C9\u2026",
+  empty:
+    "\uC77C\uCE58\uD558\uB294 \uAE00\uC774 \uC5C6\uC2B5\uB2C8\uB2E4. \uB2E4\uB978 \uAC80\uC0C9\uC5B4\uB97C \uC785\uB825\uD574 \uBCF4\uC138\uC694.",
+  searchStart:
+    "\uC81C\uBAA9, \uBCF8\uBB38, \uD1A0\uD53D\uC73C\uB85C \uAC80\uC0C9\uD558\uC138\uC694.",
+  results: "\uAC1C\uC758 \uAC80\uC0C9 \uACB0\uACFC",
+  theme: "\uC0C9\uC0C1 \uD14C\uB9C8 \uC804\uD658",
+  skip: "\uBCF8\uBB38\uC73C\uB85C \uAC74\uB108\uB6F0\uAE30",
+  updated: "\uC218\uC815",
+  noPosts:
+    "\uC0C8\uB85C\uC6B4 \uAE30\uB85D\uC774 \uC2DC\uC791\uB429\uB2C8\uB2E4.",
+  emptyIntro:
+    "\uCCAB \uBC88\uC9F8 \uAE00\uC744 \uC900\uBE44\uD558\uACE0 \uC788\uC2B5\uB2C8\uB2E4. \uC544\uC774\uB514\uC5B4\uC640 \uACBD\uD5D8, \uBC30\uC6B4 \uAC83\uB4E4\uC744 \uC774\uACF3\uC5D0 \uCC28\uACE1\uCC28\uACE1 \uC313\uC544\uAC11\uB2C8\uB2E4.",
+  about: "\uC774 \uACF5\uAC04\uC5D0 \uB300\uD558\uC5EC",
+  rss: "RSS\uB85C \uAD6C\uB3C5\uD558\uAE30",
+  rssDescription:
+    "\uC0C8 \uAE00\uC744 RSS \uB9AC\uB354\uC5D0\uC11C \uB9CC\uB098\uBCF4\uC138\uC694.",
+  error:
+    "\uAC80\uC0C9\uC744 \uBD88\uB7EC\uC624\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.",
+  menu: "\uD0D0\uC0C9 \uBA54\uB274 \uC5F4\uAE30",
+  close: "\uD0D0\uC0C9 \uBA54\uB274 \uB2EB\uAE30",
+  previous: "\uC774\uC804 \uAE00",
+  next: "\uB2E4\uC74C \uAE00",
+  members: "\uBA64\uBC84\uC2ED \uC804\uC6A9",
+  memberPrompt:
+    "\uC544\uB798\uC5D0\uC11C \uB85C\uADF8\uC778\uD558\uACE0 \uBA64\uBC84\uC2ED \uAE00\uC758 \uC804\uBB38\uC744 \uC77D\uC5B4\uBCF4\uC138\uC694.",
+  notFound:
+    "\uD398\uC774\uC9C0\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.",
+  back: "\uAE00 \uBAA9\uB85D\uC73C\uB85C",
+  language: "\uC5B8\uC5B4",
+};
+const copy = (locale) => (locale.split("-")[0] === "ko" ? ko : en);
+const localeLabel = (locale) =>
+  ({
+    ko: "\uD55C\uAD6D\uC5B4",
+    en: "English",
+    ja: "\u65E5\u672C\u8A9E",
+    "zh-hans": "\u7B80\u4F53\u4E2D\u6587",
+    "zh-hant": "\u7E41\u9AD4\u4E2D\u6587",
+    es: "Espa\xF1ol",
+    fr: "Fran\xE7ais",
+    de: "Deutsch",
+    pt: "Portugu\xEAs",
+  })[locale] ?? locale.toUpperCase();
+export { copy, localeLabel };

@@ -1,0 +1,82 @@
+name: Test and publish user template
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: template-release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.repository == 'gitblogapp/vanilla-gitblog-template-dev'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Run developer regression suite
+        run: npm run release:check
+        env:
+          PLAYWRIGHT_CHANNEL: chromium
+      - name: Export and verify the user distribution
+        run: node scripts/distribution/verify.mjs "$RUNNER_TEMP/template-distribution.tar"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: template-distribution
+          path: ${{ runner.temp }}/template-distribution.tar
+          if-no-files-found: error
+          retention-days: 7
+  publish:
+    needs: verify
+    if: github.repository == 'gitblogapp/vanilla-gitblog-template-dev' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: template-distribution
+          path: ${{ runner.temp }}/validated-template
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Publish the tested source to the user template
+        env:
+          TEMPLATE_PUBLISH_TOKEN: ${{ secrets.TEMPLATE_PUBLISH_TOKEN }}
+          EXPECTED_SOURCE_REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          latest=$(git ls-remote https://github.com/gitblogapp/vanilla-gitblog-template-dev.git refs/heads/main | cut -f1)
+          test "$latest" = "$EXPECTED_SOURCE_REVISION" || { echo "A newer development commit exists; refusing an obsolete publication."; exit 1; }
+          test -n "$TEMPLATE_PUBLISH_TOKEN" || { echo "Set the repository-scoped TEMPLATE_PUBLISH_TOKEN Actions secret."; exit 1; }
+          askpass="$RUNNER_TEMP/template-askpass"
+          trap 'rm -f "$askpass"' EXIT
+          umask 077
+          cat > "$askpass" <<'ASKPASS'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' 'x-access-token' ;;
+            *Password*) printf '%s\n' "$TEMPLATE_PUBLISH_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          ASKPASS
+          chmod 700 "$askpass"
+          export GIT_ASKPASS="$askpass" GIT_TERMINAL_PROMPT=0
+          mkdir "$RUNNER_TEMP/template-payload"
+          tar -xf "$RUNNER_TEMP/validated-template/template-distribution.tar" -C "$RUNNER_TEMP/template-payload"
+          node scripts/distribution/publish.mjs "$RUNNER_TEMP/template-payload"

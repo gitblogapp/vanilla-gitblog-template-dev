@@ -1,0 +1,29 @@
+name: Sync GitBlog feed
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: read
+  id-token: write
+jobs:
+  settings:
+    if: github.event.repository.is_template != true && github.repository != 'gitblogapp/vanilla-gitblog-template-dev'
+    runs-on: ubuntu-24.04
+    outputs:
+      enabled: ${{ steps.settings.outputs.enabled }}
+      hub_url: ${{ steps.settings.outputs.hub_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - id: settings
+        run: node scripts/hub-settings.mjs
+  register:
+    needs: settings
+    if: needs.settings.outputs.enabled == 'true' && vars.GITBLOG_OFFICIAL_INTEGRATION == 'true'
+    uses: gitblogapp/svelte-gitblog-template/.github/workflows/register-blog.yml@6e99f3f720a7aaa51c6554ecb114456ca930ce46
+    with:
+      hub_url: ${{ needs.settings.outputs.hub_url }}

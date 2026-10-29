@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "themeApiVersion": 1,
+  "extensionApiVersion": 1,
+  "preserve": [
+    "content",
+    "static",
+    "src/theme",
+    "src/extensions",
+    ".env.production",
+    ".pages.yml",
+    "README.md",
+    ".gitblog/user-instructions.md",
+    ".gitblog/authoring.json",
+    ".gitblog/setup.json"
+  ],
+  "mergeOnly": [
+    "src/pages",
+    "src/lib/template",
+    "scripts",
+    "package.json",
+    "package-lock.json",
+    ".github/workflows",
+    ".gitblog/update-policy.json",
+    "AGENTS.md",
+    "src/client.js"
+  ]
+}
