@@ -10,7 +10,7 @@
     "dev": "node scripts/dev.js",
     "build": "npm run author:check && npm run build:site && npm run images:optimize && node scripts/build-cname.mjs && npm run hub:validate && npm run discovery:check && npm run search:index",
     "preview": "node ./scripts/preview.mjs",
-    "check": "npm run test:deployment && npm run test:harness && npm run author:check && npm run posts:ids:check && npm run check:site",
+    "check": "npm run test:deployment && npm run test:harness && npm run author:check && npm run posts:ids:check && npm run taxonomy:check && npm run check:site",
     "posts:ids:check": "node ./scripts/post-ids.mjs --check",
     "posts:new": "node scripts/new-post.js",
     "test": "node --test tests/*.test.js",
