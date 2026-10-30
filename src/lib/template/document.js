@@ -106,8 +106,21 @@ export function renderPage(data, assets, custom = "") {
     meta("og:type", post ? "article" : "website", true),
     meta("og:site_name", site.title, true),
     meta("og:locale", site.language.replace("-", "_"), true),
-    ...(image ? [meta("og:image", image, true)] : []),
+    ...(image
+      ? [
+          meta("og:image", image, true),
+          meta("og:image:alt", post?.title ?? site.title, true),
+        ]
+      : []),
     meta("twitter:card", image ? "summary_large_image" : "summary"),
+    meta("twitter:title", post?.title ?? site.title),
+    meta("twitter:description", data.description),
+    ...(image
+      ? [
+          meta("twitter:image", image),
+          meta("twitter:image:alt", post?.title ?? site.title),
+        ]
+      : []),
     ...(post
       ? [
           meta(

@@ -13,7 +13,7 @@ The framework-neutral npm packages remain pinned to `0.1.1`; no package version 
 | Images             | Shared build-output optimization, source preservation and duplicate-encoding avoidance.                                                                                         |
 | Hosting            | User-owned GitHub/Cloudflare Pages, origin redirects, credential isolation and hosting-aware registration code.                                                                 |
 | History operations | Pinned official worker caller, gated on official integration and server-authorized operations. No local history worker or automatic rewriting.                                  |
-| Discovery          | Canonicals, reciprocal language links, robots/AI policies, Markdown, llms, RSS and translated feeds; base-aware web manifest using the Vanilla icon.                            |
+| Discovery          | Canonicals, reciprocal language links, robots/AI policies, Markdown, llms, RSS and translated feeds; base-aware web manifest using the shared GitBlog book icon.                            |
 | CI                 | Authoring/build/preservation checks plus explicit membership and translated speech coverage.                                                                                    |
 
 ## Intentional Vanilla differences

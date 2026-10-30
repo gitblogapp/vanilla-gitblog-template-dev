@@ -27,5 +27,5 @@ GitBlog 공식 등록/Studio/이력 삭제와 추천·분석 기능의 범위는
 - [TTS](tts.md): 새 템플릿은 `PUBLIC_TTS_ENABLED=true`, 기본 목소리 `F1`입니다. 글별 `tts`·`ttsVoice`가 우선하며 지원 언어의 DeepL/수동 번역도 처리합니다. 재생 버튼·탐색 막대·시간·배속 메뉴는 Vanilla 테마와 언어를 따릅니다.
 - [이미지 최적화](images.md): `static/uploads`의 빌드 사본을 압축하며 원본은 보존합니다. 해시 캐시와 크기 기준으로 중복 압축을 방지합니다.
 - [멤버십](memberships.md): 공개 저장소에는 허용된 미리보기만 두고 전문은 인증된 임베드에서 읽습니다. 전문 TTS나 전문 검색 색인을 생성하지 않습니다.
-- `site.webmanifest`는 기존 Vanilla 아이콘·블로그 이름·base 경로로 생성합니다. 서비스 워커나 오프라인 캐시는 추가하지 않습니다.
+- `site.webmanifest`는 공통 GitBlog 책 아이콘·블로그 이름·base 경로로 생성합니다. 서비스 워커나 오프라인 캐시는 추가하지 않습니다.
 - GitHub/Cloudflare Pages 선택과 대표 도메인 리디렉션은 공통 배포 파이프라인을 사용합니다. 공식 등록 및 Git 이력 삭제는 [서비스 연동 조건](platform-integration.md)이 충족되어야 실행됩니다.

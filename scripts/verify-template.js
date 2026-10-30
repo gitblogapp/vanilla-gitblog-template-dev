@@ -90,6 +90,21 @@ try {
       const articlePath = `${prefix}blog/${fixtureSlug}/`;
       const $ = load(read(`${articlePath}index.html`));
       const canonical = absolute(config, postPath(config, locale, fixtureSlug));
+      const thumbnail = `${siteUrl}/uploads/fixture.svg`;
+      assert.equal($('meta[property="og:image"]').attr("content"), thumbnail);
+      assert.equal($('meta[name="twitter:image"]').attr("content"), thumbnail);
+      assert.equal(
+        $('meta[name="twitter:card"]').attr("content"),
+        "summary_large_image",
+      );
+      assert.equal(
+        $('meta[property="og:image:alt"]').attr("content"),
+        post.title,
+      );
+      assert.equal(
+        $('meta[name="twitter:image:alt"]').attr("content"),
+        post.title,
+      );
       assert.equal($("html").attr("lang"), locale);
       const related = $(".related-panel");
       assert.equal(related.attr("data-post-id"), fixtureId);
