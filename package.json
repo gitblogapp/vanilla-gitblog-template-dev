@@ -54,7 +54,8 @@
     "test:images": "node --test tests/test-images.mjs",
     "distribution:export": "node scripts/distribution/export.mjs",
     "test:distribution": "node --test tests/test-distribution.mjs",
-    "release:check": "npm run check && npm run test:integration && npm run test:tts && npm run test:memberships && npm run test:browser"
+    "release:check": "npm run check && npm run test:integration && npm run test:tts && npm run test:memberships && npm run test:browser",
+    "test:deepl": "node ./tests/test-deepl-posts.mjs"
   },
   "dependencies": {
     "@gitblogapp/browser": "0.1.1",
