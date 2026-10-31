@@ -47,5 +47,6 @@
   "scripts": {
     "check": "npm run author:check && npm run posts:ids:check && npm run taxonomy:check && npm run check:site",
     "check:site": "node scripts/check-site.mjs"
-  }
+  },
+  "releaseChannel": "stable"
 }

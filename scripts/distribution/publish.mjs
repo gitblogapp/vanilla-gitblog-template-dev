@@ -49,11 +49,15 @@ export function publish(payload, remote = `https://github.com/${config.repositor
 		if (fs.existsSync(release)) previous = JSON.parse(fs.readFileSync(release, 'utf8'));
 		const source = path.join(target, '.gitblog/distribution.json');
 		if (fs.existsSync(source)) oldSource = JSON.parse(fs.readFileSync(source, 'utf8'));
-		if (oldSource?.sourceRevision === provenance.sourceRevision) {
+		if (oldSource?.sourceRevision === provenance.sourceRevision && previous?.channel === config.releaseChannel) {
 			console.log('This development commit is already published.');
 			return previous;
 		}
-		const version = nextVersion(previous?.version, config.minimumVersion);
+		// A new channel starts its own version sequence without moving historical tags.
+		const channel = config.releaseChannel;
+		if (!/^[a-z][a-z0-9-]*$/.test(channel)) throw new Error('Invalid release channel');
+		const version = nextVersion(previous?.channel === channel ? previous.version : null, config.minimumVersion);
+		const tag = `${channel}/v${version}`;
 		run(['config', 'user.name', 'gitblog-template-bot']);
 		run(['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com']);
 		run(['rm', '-r', '--ignore-unmatch', '.']);
@@ -61,13 +65,13 @@ export function publish(payload, remote = `https://github.com/${config.repositor
 		run(['add', '--all']);
 		run(['commit', '-m', `chore: publish template ${version} from ${provenance.sourceRevision}`]);
 		const revision = run(['rev-parse', 'HEAD']);
-		const metadata = { schemaVersion: 1, version, revision };
+		const metadata = { schemaVersion: 1, version, revision, channel };
 		fs.writeFileSync(release, JSON.stringify(metadata, null, 2) + '\n');
 		run(['add', '.gitblog/release.json']);
 		run(['commit', '-m', `chore: record stable template ${version}`]);
-		run(['tag', `v${version}`]);
+		run(['tag', tag]);
 		// Both the content and its stable pointer become visible together. Never force-push.
-		run(['push', '--atomic', 'origin', 'HEAD:main', `refs/tags/v${version}`]);
+		run(['push', '--atomic', 'origin', 'HEAD:main', `refs/tags/${tag}`]);
 		console.log(
 			JSON.stringify({
 				...metadata,
