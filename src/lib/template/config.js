@@ -1,3 +1,4 @@
+import { publicUrl } from '@gitblogapp/core/seo';
 import fs from "node:fs";
 import path from "node:path";
 import { readPublicSettings } from "../../../scripts/lib/site-settings.mjs";
@@ -72,6 +73,8 @@ function loadConfig(
     description: setting("PUBLIC_SITE_DESCRIPTION"),
     footer: setting("PUBLIC_SITE_FOOTER"),
     author: setting("PUBLIC_SITE_OWNER"),
+    authorUrl: setting("PUBLIC_AUTHOR_URL") ? publicUrl(setting("PUBLIC_AUTHOR_URL"), "PUBLIC_AUTHOR_URL") : "",
+    authorSiteUrl: siteUrl,
     image: setting("PUBLIC_SITE_IMAGE"),
     giscusEnabled: publicFlag(env.PUBLIC_GISCUS_ENABLED),
     giscusHost: host.origin,

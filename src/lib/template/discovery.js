@@ -1,3 +1,4 @@
+import { articleSeoMarkdown } from '@gitblogapp/core/seo';
 import { languageTag, localizedSite } from "./config.js";
 import { absolute, postPath } from "./urls.js";
 function articleLinks(blog, post) {
@@ -64,7 +65,7 @@ ${Object.entries(metadata)
   .join("\n")}
 ---
 
-${post.body.trim()}
+${articleSeoMarkdown(post.seo, post.body, post.locale).trim()}
 `;
 }
 const inline = (value) =>

@@ -27,3 +27,5 @@ Hosting: [GitHub Pages / Cloudflare Pages](deployment.md).
 [Getting started](getting-started.md) contains template setup and feature information. The root README belongs to the blog owner and may be replaced or removed. GitBlog preserves it during updates; operational instructions do not depend on it.
 
 Development tests and fixture commands documented here run in the [development repository](https://github.com/gitblogapp/vanilla-gitblog-template-dev). User blogs contain `check` and `update:check`, but do not include development tests or publishing tools.
+
+Answer-first writing and evidence: [Optional answer, sources, reference date and FAQ](answer-engine-content.md).

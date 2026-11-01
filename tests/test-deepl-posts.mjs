@@ -100,7 +100,7 @@ globalThis.fetch = async (url, init) => {
 	assert.ok(translated.content.includes('`a \\| b`'));
 	assert.ok(translated.content.includes('https://example.com/a?q=1&b=2'));
 	assert.equal(translated.data.locale, 'en-gb');
-	assert.equal(translated.data.translationSchemaVersion, 'markdown-xml-v3');
+	assert.equal(translated.data.translationSchemaVersion, 'markdown-xml-v4');
 	assert.ok(
 		(await requests())
 			.filter((row) => row.tag_handling === 'xml')
@@ -133,7 +133,7 @@ globalThis.fetch = async (url, init) => {
 		})
 	);
 	run();
-	assert.equal(matter(await read(output)).data.translationSchemaVersion, 'markdown-xml-v3');
+	assert.equal(matter(await read(output)).data.translationSchemaVersion, 'markdown-xml-v4');
 
 	// Large fenced code is kept locally, including CRLF and nested shorter fences.
 	const code =
@@ -173,6 +173,22 @@ globalThis.fetch = async (url, init) => {
 			.filter((row) => row.tag_handling === 'xml')
 			.every((row) => row.target_lang === 'EN-US')
 	);
+	const seo = {question:'Source question?',answer:'Source answer',dataAsOf:'2026-11-02',sources:[{title:'Source report',url:'https://example.com/evidence?a=1&b=2'}],faq:[{question:'Source follow-up?',answer:'Source explanation'}]};
+	await source('Source SEO body.', {seo});
+	await write('requests.jsonl', '');
+	run('collapse-lines');
+	const seoResult = matter(await read(output)).data.seo;
+	assert.equal(seoResult.question, 'Translated question?');
+	assert.equal(seoResult.answer, 'Translated answer');
+	assert.equal(seoResult.sources[0].title, 'Translated report');
+	assert.equal(seoResult.sources[0].url, seo.sources[0].url);
+	assert.equal(seoResult.dataAsOf, seo.dataAsOf);
+	assert.equal(seoResult.faq[0].answer, 'Translated explanation');
+	const submitted = (await requests()).flatMap(row => row.text);
+	assert.ok(!submitted.includes(seo.sources[0].url) && !submitted.includes(seo.dataAsOf));
+	await source('Metadata removed.');
+	run();
+	assert.equal(matter(await read(output)).data.seo, undefined);
 	console.log(
 		'DeepL post regressions passed: GFM tables, incomplete responses, protected and long code, UTF-8 batching, locale variants, freshness and atomic post preservation.'
 	);

@@ -48,7 +48,7 @@ function fixture(base = '') {
 	for (const page of pages) {
 		set(
 			page.canonicalUrl,
-			`<html><head><link rel="canonical" href="${page.canonicalUrl}">${page.alternateLinks.map((link) => `<link rel="alternate" hreflang="${link.hreflang}" href="${link.href}">`).join('')}</head><body><h1>${page.title}</h1><div class="article-content">Readable original body.</div></body></html>`
+			`<html><head><title>${page.title}</title><meta name="description" content="Description"><meta property="og:url" content="${page.canonicalUrl}"><script type="application/ld+json">${JSON.stringify({'@context':'https://schema.org','@type':'BlogPosting',headline:page.title,url:page.canonicalUrl,author:{'@type':'Person','@id':site+'/#author',name:'Author'},datePublished:'2026-01-01',dateModified:'2026-01-01'})}</script><link rel="canonical" href="${page.canonicalUrl}">${page.alternateLinks.map((link) => `<link rel="alternate" hreflang="${link.hreflang}" href="${link.href}">`).join('')}</head><body><h1>${page.title}</h1><div class="article-content">Readable original body.</div></body></html>`
 		);
 		set(
 			page.markdownUrl,

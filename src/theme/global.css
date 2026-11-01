@@ -1236,3 +1236,10 @@ summary::-webkit-details-marker {
     padding: 0;
   }
 }
+
+/* Optional answer/evidence content uses the surrounding article typography. */
+.gitblog-answer { border-inline-start: 3px solid currentColor; padding-inline-start: 1.2rem; margin-block: 1.5rem 2rem; }
+.gitblog-answer > h2 { margin-top: 0; }
+.gitblog-data-as-of { font-size: .9em; opacity: .8; margin-top: 2rem; }
+.gitblog-sources, .gitblog-faq { margin-block: 2rem; }
+.gitblog-sources a { overflow-wrap: anywhere; }

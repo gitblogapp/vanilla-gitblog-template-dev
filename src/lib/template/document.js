@@ -1,3 +1,4 @@
+import { authorEntity, articleSeoSchema } from "@gitblogapp/core/seo";
 import fs from "node:fs";
 import { html, serialize } from "./html.js";
 import {
@@ -52,7 +53,8 @@ export function renderPage(data, assets, custom = "") {
         description: data.description,
         datePublished: new Date(post.date).toISOString(),
         dateModified: post.lastModified,
-        author: { "@type": "Person", name: site.author },
+        ...articleSeoSchema(post.seo),
+        author: authorEntity(site.author, site.authorSiteUrl, site.authorUrl),
         mainEntityOfPage: data.canonical,
         url: data.canonical,
         inLanguage: site.language,

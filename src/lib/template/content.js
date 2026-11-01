@@ -1,3 +1,4 @@
+import { publicArticleSeo, articleSeoHtml } from '@gitblogapp/core/seo';
 import { membershipStub } from "@gitblogapp/core/membership";
 import { voice, findAudio, rawAudio } from "@gitblogapp/core/speech";
 import { createSpokenText } from "@gitblogapp/core/body-excerpt";
@@ -198,9 +199,12 @@ function parsePost(file, source, locale, config, original) {
     new URL(absolute(config, cover)).origin !== new URL(config.siteUrl).origin
   )
     fail("Hub cover must have same origin");
+  const seo = publicArticleSeo(data.seo, membership.access);
   const rendered = renderMarkdown(body, config);
+  rendered.html = articleSeoHtml(seo, rendered.html, locale);
   return {
     ...membership,
+    seo,
     ttsEnabled,
     ttsVoice,
     audioUrl: audio ? rawAudio(config.repository, audio.fullPath) : null,
