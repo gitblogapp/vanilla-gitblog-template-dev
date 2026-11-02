@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { load } from 'cheerio';
 import { marked } from 'marked';
+import { XMLParser } from 'fast-xml-parser';
+import { previewContentXml } from '../src/lib/template/preview-content.js';
 import { sourceHash, translationHash } from '../scripts/lib/authoring.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const fixture = await mkdtemp(path.join(os.tmpdir(), 'gitblog-seo-content-'));
@@ -14,6 +16,10 @@ const excluded = new Set(['.git', 'node_modules', '.svelte-kit', '.astro', 'buil
 async function write(file, text) { const target = path.join(fixture, file); await mkdir(path.dirname(target), { recursive: true }); await writeFile(target, text); }
 const read = file => readFile(path.join(fixture, file), 'utf8');
 const seo = { question: 'What was verified?', answer: 'Verified answer <script>doNotExecute()</script>', dataAsOf: '2026-11-02', sources: [{title:'Original report',url:'https://example.com/report?a=1&b=2'}], faq:[{question:'Any limits?',answer:'Only the tested sample.'}] };
+const privateSeo = { answer: 'PRIVATE_SEO_MUST_NOT_BE_PUBLISHED' };
+assert.ok(!previewContentXml({bodyExcerpt:'Approved preview',access:'membership',previewAllowed:true,seo:privateSeo}, 50000).includes('PRIVATE_SEO'));
+assert.equal(previewContentXml({bodyExcerpt:'Revoked',access:'membership',previewAllowed:false,seo:privateSeo}, 50000), '');
+for (const budget of [0,10,100,1000,10000]) assert.ok(Buffer.byteLength(previewContentXml({bodyExcerpt:'🌱 & < >'.repeat(1000),access:'public',previewAllowed:true,seo}, budget)) <= budget);
 const rows = ['legacy', 'enhanced', 'draft', 'member'];
 try {
   await cp(root, fixture, {recursive:true, filter:file => !path.relative(root,file).split(path.sep).some(part=>excluded.has(part))});
@@ -35,6 +41,13 @@ try {
   const result = spawnSync('npm',['run','build'],{cwd:fixture,env,encoding:'utf8',maxBuffer:20*1024*1024,timeout:180000});
   assert.equal(result.status,0,result.stdout+'\n'+result.stderr);
   for (const prefix of ['', 'en/']) {
+    const feedText = await read(`build/${prefix}rss.xml`);
+    assert.ok(Buffer.byteLength(feedText) <= 2 * 1024 * 1024);
+    const items = new XMLParser({parseTagValue:false}).parse(feedText).rss.channel.item;
+    const item = items.find(item => item.title === (prefix ? 'EN enhanced' : 'Article enhanced'));
+    assert.deepEqual(JSON.parse(item['hub:seo']), prefix ? {...seo,question:'Translated question',answer:'Translated verified answer'} : seo);
+    assert.equal(items.find(item => item.title === (prefix ? 'EN member' : 'Article member'))['hub:seo'], undefined);
+    assert.ok(!feedText.includes('DRAFT_SEO_MUST_NOT_BE_PUBLISHED'));
     const page = await read(`build/${prefix}blog/enhanced/index.html`), $ = load(page);
     assert.equal($('.gitblog-answer').length,1);
     assert.equal($('.gitblog-faq h3').text(),'Any limits?');
