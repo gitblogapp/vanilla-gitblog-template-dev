@@ -55,3 +55,7 @@ Adapted for GitBlog from [fire-your-seo-agency](https://github.com/leopard627/fi
 ## GitBlog 미리보기 전달
 
 공개 글의 `seo` 정보는 RSS의 선택 필드 `hub:seo`로 전달되어 GitBlog 미리보기의 핵심 답변·출처·FAQ에 사용됩니다. 각 번역본은 해당 언어의 정보를 전달합니다. 멤버십 글의 SEO 정보는 내보내지 않으며, 허용된 공개 미리보기만 제공합니다. RSS 2 MiB 제한을 지키기 위해 남은 공간이 부족하면 SEO 필드 전체를 생략하고 기존 본문 미리보기를 유지합니다.
+
+## 조직 작성자
+
+조직 블로그는 `.env.production`에 `PUBLIC_SITE_AUTHOR_TYPE=Organization`을 설정합니다. 개인 블로그는 기본값 `Person`을 유지합니다. GitBlog Studio의 새 블로그 설정은 저장소 소유자 유형을 자동 반영합니다. 기존 조직 블로그는 템플릿 업데이트 후 위 값을 추가하고 재배포하세요. 작성자 이름과 `PUBLIC_AUTHOR_URL`의 사용자 설정 및 관리 권한은 유지됩니다.

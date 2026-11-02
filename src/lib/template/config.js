@@ -73,6 +73,7 @@ function loadConfig(
     description: setting("PUBLIC_SITE_DESCRIPTION"),
     footer: setting("PUBLIC_SITE_FOOTER"),
     author: setting("PUBLIC_SITE_OWNER"),
+    authorType: setting('PUBLIC_SITE_AUTHOR_TYPE') === 'Organization' ? 'Organization' : 'Person',
     authorUrl: setting("PUBLIC_AUTHOR_URL") ? publicUrl(setting("PUBLIC_AUTHOR_URL"), "PUBLIC_AUTHOR_URL") : "",
     authorSiteUrl: siteUrl,
     image: setting("PUBLIC_SITE_IMAGE"),

@@ -55,6 +55,7 @@ try {
     assert.equal($('.gitblog-data-as-of time').attr('datetime'),seo.dataAsOf);
     assert.equal($('.gitblog-answer script').length,0);
     const schema = $('script[type="application/ld+json"]').toArray().map(n=>JSON.parse($(n).text())).find(n=>n['@type']==='BlogPosting');
+    assert.equal(schema.author['@type'],'Person');
     assert.equal(schema.author['@id'],'https://fixture.github.io/blog/#author');
     assert.equal(schema.author.url,'https://example.com/about');
     assert.equal(schema.citation[0],seo.sources[0].url);
@@ -74,5 +75,19 @@ try {
   assert.ok(!sitemap.includes('/draft/'));
   await assert.rejects(read('build/blog/draft/index.html'));
   await assert.rejects(read('build/blog/draft/index.md'));
+  // Rebuild the same corpus as an organization, including legacy and membership pages.
+  env.PUBLIC_SITE_AUTHOR_TYPE = 'Organization';
+  const organizationBuild = spawnSync('npm',['run','build'],{cwd:fixture,env,encoding:'utf8',maxBuffer:20*1024*1024,timeout:180000});
+  assert.equal(organizationBuild.status,0,organizationBuild.stdout+'\n'+organizationBuild.stderr);
+  for (const prefix of ['', 'en/']) for (const slug of ['legacy','enhanced','member']) {
+    const $ = load(await read(`build/${prefix}blog/${slug}/index.html`));
+    const schema = $('script[type="application/ld+json"]').toArray().map(n=>JSON.parse($(n).text())).find(n=>n['@type']==='BlogPosting');
+    assert.equal(schema.author['@type'],'Organization');
+    assert.equal(schema.author.name,'Test Writer');
+    assert.equal(schema.author.url,'https://example.com/about');
+    assert.equal(schema.author['@id'],'https://fixture.github.io/blog/#author');
+    if (schema.publisher) assert.equal(schema.publisher['@type'],'Organization');
+    if (slug==='member') assert.equal($('.gitblog-answer,.gitblog-sources,.gitblog-faq').length,0);
+  }
   console.log('SEO content build passed: initial HTML, Markdown parity, translated metadata, stable author identity, legacy posts, drafts and membership boundary.');
 } finally { await rm(fixture,{recursive:true,force:true}); }
