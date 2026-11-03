@@ -90,12 +90,12 @@ test('exports a clean user template and publishes resolvable stable revisions id
 		git(['push', 'origin', 'refs/tags/v1.0.0'], seed);
 		const historicalTag = git(['rev-parse', 'refs/tags/v1.0.0'], remote);
 		const first = publish(output, remote);
-		assert.equal(first.version, '1.0.0');
+		assert.equal(first.version, config.minimumVersion);
 		const published = JSON.parse(git(['show', 'main:.gitblog/release.json'], remote));
 		assert.deepEqual(published, first);
 		assert.equal(first.channel, 'stable');
 		assert.equal(git(['rev-parse', 'refs/tags/v1.0.0'], remote), historicalTag);
-		assert.equal(git(['rev-parse', 'refs/tags/stable/v1.0.0'], remote), git(['rev-parse', 'main'], remote));
+		assert.equal(git(['rev-parse', `refs/tags/stable/v${config.minimumVersion}`], remote), git(['rev-parse', 'main'], remote));
 		assert.equal(pkg.version, '1.0.0');
 		assert.ok(git(['ls-tree', '--name-only', first.revision], remote).includes('src'));
 		assert.ok(
@@ -108,7 +108,9 @@ test('exports a clean user template and publishes resolvable stable revisions id
 		const data = JSON.parse(fs.readFileSync(provenance));
 		data.sourceRevision = 'a'.repeat(40);
 		fs.writeFileSync(provenance, JSON.stringify(data));
-		assert.equal(publish(output, remote).version, '1.0.1');
+		const [major, minor, patch] = config.minimumVersion.split('.').map(Number);
+		assert.equal(publish(output, remote).version, `${major}.${minor}.${patch + 1}`);
+		assert.equal(nextVersion('1.0.8', '1.0.10'), '1.0.10');
 		assert.equal(nextVersion('1.14.4', '2.0.0'), '2.0.0');
 		assert.equal(nextVersion('2.3.4', '2.0.0'), '2.3.5');
 	} finally {

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "repository": "gitblogapp/vanilla-gitblog-template",
   "developmentRepository": "gitblogapp/vanilla-gitblog-template-dev",
-  "minimumVersion": "1.0.0",
+  "minimumVersion": "1.0.10",
   "files": [
     ".env.example",
     ".env.production",
