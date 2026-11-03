@@ -48,8 +48,8 @@ test("environment and legacy site copy agree across renderer and harness, preser
     /HTTPS/
   );
   assert.throws(
-    () => loadConfig(dir, "production", { PUBLIC_TRANSLATION_LOCALES: "en,ja,fr,de,es,pt,it,nl" }),
-    /8 feeds/
+    () => loadConfig(dir, "production", { PUBLIC_TRANSLATION_LOCALES: "en,ja,fr,de,es,pt,it,ar,pt-br,zh-hans,zh-hant,nl" }),
+    /12 feeds/
   );
   write(dir, "content/translations/en/site.json", '{"footer":""}');
   assert.equal(localizedSite(config, "en").footer, "");

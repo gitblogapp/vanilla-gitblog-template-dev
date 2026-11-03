@@ -168,6 +168,11 @@ try {
 	assert.equal((await checkSetup(fixture, repository)).ok, false);
 	await apply(changed);
 
+	// The platform offers twelve languages including the source.
+	assert.equal((await apply({ ...changed, PUBLIC_SOURCE_LOCALE: 'ko', PUBLIC_TRANSLATION_LOCALES: 'ar,de,en,es,fr,it,ja,pt,pt-br,zh-hans,zh-hant' })).applied, true);
+	assert.equal((await checkSetup(fixture, repository)).ok, true);
+	await apply(changed);
+
 	const good = await read('.env.production');
 	for (const bad of [
 		{ PUBLIC_SITE_URL: 'https://bob.github.io/blog' },
@@ -177,7 +182,7 @@ try {
 		{ PUBLIC_SITE_URL: 'https://notes.alice.dev?x=1' },
 		{ PUBLIC_SITE_REPOSITORY: 'bob/blog' },
 		{ PUBLIC_SOURCE_LOCALE: '../ko' },
-		{ PUBLIC_TRANSLATION_LOCALES: 'en,ja,fr,de,es,it,pt,zh' },
+		{ PUBLIC_TRANSLATION_LOCALES: 'ar,de,en,es,fr,it,ja,pt,pt-br,zh-hans,zh-hant,nl' },
 		{ PUBLIC_GISCUS_REPO_ID: 'wrong' },
 		{ PUBLIC_GISCUS_CATEGORY_ID: 'foreign' }
 	]) {
