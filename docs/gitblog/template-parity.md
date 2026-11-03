@@ -2,7 +2,7 @@
 
 Updated on 2026-10-26 against `gitblogapp/svelte-gitblog-template` 1.14.4,
 source revision `8e341bac3096731e14891a867bb16ab20ba70fd6`.
-The framework-neutral npm packages remain pinned to `0.1.1`; no package version change is needed.
+The framework-neutral npm packages are pinned to `0.2.1`, including answer/evidence metadata and support for 12 language feeds.
 
 | Capability         | Vanilla implementation                                                                                                                                                          |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -59,9 +59,9 @@
     "test:seo-content": "node tests/test-seo-content.mjs"
   },
   "dependencies": {
-    "@gitblogapp/browser": "file:vendor/gitblog-packages/gitblogapp-browser-0.2.0.tgz",
-    "@gitblogapp/cli": "file:vendor/gitblog-packages/gitblogapp-cli-0.2.1.tgz",
-    "@gitblogapp/core": "file:vendor/gitblog-packages/gitblogapp-core-0.2.0.tgz",
+    "@gitblogapp/browser": "0.2.1",
+    "@gitblogapp/cli": "0.2.1",
+    "@gitblogapp/core": "0.2.1",
     "cheerio": "^1.2.0",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.12.0",

@@ -24,6 +24,16 @@ test('exports a clean user template and publishes resolvable stable revisions id
 		])
 			assert.ok(!fs.existsSync(path.join(output, name)), name);
 		const pkg = JSON.parse(fs.readFileSync(path.join(output, 'package.json')));
+		assert.ok(!fs.existsSync(path.join(output, 'vendor/gitblog-packages')));
+		const lock = JSON.parse(fs.readFileSync(path.join(output, 'package-lock.json')));
+		for (const name of ['@gitblogapp/core', '@gitblogapp/cli', '@gitblogapp/browser']) {
+			assert.match(pkg.dependencies[name], /^\d+\.\d+\.\d+$/);
+			const entry = lock.packages[`node_modules/${name}`];
+			assert.equal(entry.version, pkg.dependencies[name]);
+			assert.ok(entry.resolved.startsWith('https://registry.npmjs.org/'), name);
+			assert.match(entry.integrity, /^sha512-/);
+		}
+
 		assert.ok(
 			!Object.keys(pkg.scripts).some((name) => /^(test|release|distribution)(:|$)/.test(name))
 		);
