@@ -41,6 +41,9 @@ for (const changes of [
 	{ archived: true },
 	{ is_template: true },
 	{ template_repository: null },
+	{ template_repository: { full_name: 'gitblogapp/astro-gitblog-template-dev' } },
+	{ template_repository: { full_name: 'other/astro-gitblog-template' } },
+	{ template_repository: { full_name: 'gitblogapp/unapproved-gitblog-template' } },
 	{ default_branch: 'other' }
 ]) {
 	await assert.rejects(
@@ -55,6 +58,18 @@ for (const changes of [
 	);
 }
 await assert.rejects(registerBlog({ ...env, GITBLOG_HUB_URL: 'http://example.com' }, fetcher));
+for (const template of ['svelte', 'astro', 'react', 'vanilla']) {
+	for (const relationship of ['template_repository', 'parent', 'source']) {
+		let sent = false;
+		await registerBlog(env, async (url, options) => {
+			if (String(url) === 'https://api.github.com/repos/owner/blog')
+				return Response.json({ ...repo, template_repository: null, [relationship]: { full_name: `GitBlogApp/${template}-gitblog-template` } });
+			if (String(url).includes('/deploy-hint')) sent = true;
+			return fetcher(url, options);
+		}, async () => {});
+		assert.equal(sent, true, `${template}: ${relationship}`);
+	}
+}
 for (const siteUrl of ['https://personal-blog.pages.dev', 'https://notes.example.com']) {
 	const cfCalls = [];
 	await registerBlog(
