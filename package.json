@@ -47,7 +47,7 @@
     "test:harness": "node --test tests/test-*.mjs tests/test-*.js",
     "test:harness-docs": "node tests/test-harness-docs.mjs",
     "search:index": "node scripts/build-search.mjs",
-    "test:deployment": "node ./tests/test-deployment.mjs && node --test tests/test-pages-domains.mjs",
+    "test:deployment": "node ./tests/test-deployment.mjs && node --test tests/test-pages-domains.mjs tests/test-sync-pages-domain.mjs",
     "images:optimize": "node scripts/optimize-images.mjs",
     "test:tts": "node tests/test-tts-translations.mjs && python3 -m unittest discover -s tests/tts -v",
     "test:memberships": "node tests/test-memberships.mjs",

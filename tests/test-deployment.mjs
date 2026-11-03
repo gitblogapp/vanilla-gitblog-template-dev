@@ -38,3 +38,12 @@ assert.ok(cloudflare.run.includes('--branch "$CF_BRANCH"'));
 assert.ok(cloudflare.run.includes('wrangler@'));
 assert.ok(!JSON.stringify(workflow.jobs.build).includes('CLOUDFLARE_API_TOKEN'));
 console.log('Hosting provider validation, pending setup, secret metadata and workflow isolation passed.');
+
+const syncIndex = workflow.jobs.build.steps.findIndex(step => step.run === 'node scripts/sync-pages-domain.mjs');
+assert.ok(syncIndex >= 0 && syncIndex < workflow.jobs.build.steps.findIndex(step => step.run === 'npm run site:check'));
+assert.equal(workflow.jobs.build.steps[syncIndex].if, "needs.configuration.outputs.provider == 'github'");
+const expectedActions = {'checkout':'v6','setup-node':'v6','cache':'v5','configure-pages':'v6','deploy-pages':'v5','upload-artifact':'v6','download-artifact':'v7','setup-python':'v6'};
+for (const job of Object.values(workflow.jobs)) for (const step of job.steps || []) {
+ const match = step.uses?.match(/^actions\/([^@]+)@(.+)$/);
+ if (match && expectedActions[match[1]]) assert.equal(match[2], expectedActions[match[1]]);
+}
