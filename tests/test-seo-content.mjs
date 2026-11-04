@@ -28,11 +28,11 @@ try {
   for (const [i, slug] of rows.entries()) {
     const id = `${i+1}`.repeat(8)+'-1111-4111-8111-111111111111';
     const data = {id,title:`Article ${slug}`,description:'Public summary',date:'2026-01-01',published:slug!=='draft',category:'Notes',tags:[], ...(slug==='enhanced'?{seo}:{}), ...(slug==='draft'?{seo:{answer:'DRAFT_SEO_MUST_NOT_BE_PUBLISHED'}}:{}), ...(slug==='member'?{access:'membership',membershipId:id,previewAllowed:true,tts:false}:{})};
-    const body = slug === 'member' ? data.description : '## Body heading\n\nOriginal body.';
+    const body = slug === 'member' ? data.description : '## Body heading\n\nOriginal body.\n\nhttps://youtu.be/M7lc1UVf-VE?t=90\n\nInline video: https://youtu.be/M7lc1UVf-VE?t=90\n\n```text\nhttps://youtu.be/M7lc1UVf-VE?t=90\n```';
     const raw = matter.stringify(body,data), sourcePath = `content/posts/${slug}.md`;
     await write(sourcePath,raw);
     if (slug === 'draft') continue;
-    const translated = matter(matter.stringify('English public body.', {...data,title:`EN ${slug}`,description:'English public summary',locale:'en',sourceLocale:'ko',sourcePath,sourceHash:sourceHash(raw),translationSource:'manual',translatedAt:'2026-11-02T00:00:00Z',...(slug==='enhanced'?{seo:{...seo,question:'Translated question',answer:'Translated verified answer'}}:{})}));
+    const translated = matter(matter.stringify(slug === 'member' ? 'English public body.' : 'English public body.\n\nhttps://youtu.be/M7lc1UVf-VE?t=90\n\nInline video: https://youtu.be/M7lc1UVf-VE?t=90\n\n```text\nhttps://youtu.be/M7lc1UVf-VE?t=90\n```', {...data,title:`EN ${slug}`,description:'English public summary',locale:'en',sourceLocale:'ko',sourcePath,sourceHash:sourceHash(raw),translationSource:'manual',translatedAt:'2026-11-02T00:00:00Z',...(slug==='enhanced'?{seo:{...seo,question:'Translated question',answer:'Translated verified answer'}}:{})}));
     translated.data.translationContentHash = translationHash(translated);
     await write(`content/translations/en/posts/${slug}.md`,matter.stringify(translated.content,translated.data));
   }
@@ -50,6 +50,12 @@ try {
     assert.ok(!feedText.includes('DRAFT_SEO_MUST_NOT_BE_PUBLISHED'));
     const page = await read(`build/${prefix}blog/enhanced/index.html`), $ = load(page);
     assert.equal($('.gitblog-answer').length,1);
+    assert.equal($('.youtube-embed iframe').length, 1);
+    assert.equal($('.youtube-embed iframe').attr('src'), 'https://www.youtube-nocookie.com/embed/M7lc1UVf-VE?start=90');
+    assert.match($('.youtube-embed iframe').attr('style'), /aspect-ratio:16\/9/);
+    assert.equal($('.youtube-embed a').attr('href'), 'https://www.youtube.com/watch?v=M7lc1UVf-VE&t=90s');
+    assert.ok($('p a').toArray().some(n => $(n).attr('href') === 'https://youtu.be/M7lc1UVf-VE?t=90'));
+    assert.ok($('pre code').text().includes('https://youtu.be/M7lc1UVf-VE?t=90'));
     assert.equal($('.gitblog-faq h3').text(),'Any limits?');
     assert.equal($('.gitblog-sources a').attr('href'),seo.sources[0].url);
     assert.equal($('.gitblog-data-as-of time').attr('datetime'),seo.dataAsOf);
@@ -62,8 +68,10 @@ try {
     assert.equal(schema.abstract,prefix?'Translated verified answer':seo.answer);
     assert.ok($('a[rel="author"]').toArray().some(n=>$(n).attr('href')==='https://example.com/about'));
     const md = await read(`build/${prefix}blog/enhanced/index.md`);
+    assert.ok(md.includes('https://youtu.be/M7lc1UVf-VE?t=90'));
+    assert.ok(!md.includes('<iframe'));
     assert.ok(md.includes(seo.dataAsOf) && md.includes('Only the tested sample'));
-    assert.equal(load(marked.parse(matter(md).content))('a').first().attr('href'),seo.sources[0].url);
+    assert.ok(load(marked.parse(matter(md).content))('a').toArray().some(n => n.attribs.href === seo.sources[0].url));
     const legacy = load(await read(`build/${prefix}blog/legacy/index.html`));
     assert.equal(legacy('.gitblog-answer,.gitblog-sources,.gitblog-faq').length,0);
     const member = await read(`build/${prefix}blog/member/index.html`);

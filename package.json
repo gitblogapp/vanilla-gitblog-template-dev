@@ -60,9 +60,9 @@
     "test:webp": "node tests/test-webp-covers.mjs"
   },
   "dependencies": {
-    "@gitblogapp/browser": "0.2.3",
-    "@gitblogapp/cli": "0.2.3",
-    "@gitblogapp/core": "0.2.3",
+    "@gitblogapp/browser": "0.2.4",
+    "@gitblogapp/cli": "0.2.4",
+    "@gitblogapp/core": "0.2.4",
     "cheerio": "^1.2.0",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.12.0",

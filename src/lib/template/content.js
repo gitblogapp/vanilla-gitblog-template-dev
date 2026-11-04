@@ -1,3 +1,4 @@
+import { youtubeExtension } from '@gitblogapp/core/youtube';
 import { resolveCoverImage } from '@gitblogapp/core/cover-images';
 import { publicArticleSeo, articleSeoHtml } from '@gitblogapp/core/seo';
 import { membershipStub } from "@gitblogapp/core/membership";
@@ -61,6 +62,8 @@ const markdown = new Marked({
     },
   },
 });
+markdown.use(youtubeExtension());
+
 function renderMarkdown(body, config) {
   const $ = load(markdown.parse(body), {}, false);
   const toc = [];
