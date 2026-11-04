@@ -134,9 +134,9 @@ function home(d) {
     </section>
   </div>${aside(d)}`;
 }
-function integrations(d, post) {
-  return `${post.access === "membership" ? `<section class="membership-embed" data-member-id="${html(post.membershipId)}" data-locale="${html(d.locale)}" data-pagefind-ignore><noscript>JavaScript is required to read this membership article.</noscript></section>` : ""}
-    ${d.integrations.related ? `<section class="related-panel" data-repo="${html(d.integrations.repository)}" data-post-id="${html(post.id)}" data-lang="${html(d.locale)}" data-limit="${d.integrations.limit}" data-pagefind-ignore></section>` : ""}`;
+function integrations(d, post, placement) {
+  return `${placement === "body" && post.access === "membership" ? `<section class="membership-embed" data-member-id="${html(post.membershipId)}" data-locale="${html(d.locale)}" data-pagefind-ignore><noscript>JavaScript is required to read this membership article.</noscript></section>` : ""}
+    ${placement === "after-comments" && d.integrations.related ? `<section class="related-panel" data-repo="${html(d.integrations.repository)}" data-post-id="${html(post.id)}" data-lang="${html(d.locale)}" data-limit="${d.integrations.limit}" data-pagefind-ignore></section>` : ""}`;
 }
 function article(d) {
   const post = d.post,
@@ -159,11 +159,12 @@ function article(d) {
         ${post.cover ? `<img class="article-cover" src="${html(post.cover)}" alt="" width="1200" height="650" fetchpriority="high">` : ""}
         ${slot("article-before-body", d)}${post.audioUrl ? articleAudio(post.audioUrl, d.locale) : ""}
         <div class="prose article-content">${post.html || (post.access === "membership" ? `<p>${html(ui.memberPrompt)}</p>` : "")}</div>
-        ${integrations(d, post)}${slot("article-after-body", d)}
+        ${integrations(d, post, "body")}${slot("article-after-body", d)}
         <div class="article-footer" data-pagefind-ignore><div class="tags">${post.tags.map((t) => `<a class="topic-pill" href="${html(d.search)}?q=${encodeURIComponent(t)}" data-pagefind-filter="tag:${html(t)}">${html(t)}</a>`).join("")}</div>${post.updated ? `<p>${html(ui.updated)} ${dateText(post.updated, s.language)}</p>` : ""}</div>
       </article>
     </div>
     ${giscus ? `<section class="comments panel" data-pagefind-ignore><div class="file-heading">${icon("book")}<h2>${html(ui.comments)}</h2></div><div class="giscus"></div></section>` : ""}
+    ${integrations(d, post, "after-comments")}
     <nav class="article-pagination" aria-label="${html(ui.journal)}">${previous ? `<a href="${html(previous.url)}">${icon("back")}<span><small>${html(ui.previous)}</small>${html(previous.title)}</span></a>` : "<span></span>"}${next ? `<a href="${html(next.url)}"><span><small>${html(ui.next)}</small>${html(next.title)}</span>${icon("arrow")}</a>` : ""}</nav>
   </div>${aside(d)}`;
 }
