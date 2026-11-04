@@ -1,3 +1,4 @@
+import { resolveCoverImage } from '@gitblogapp/core/cover-images';
 import { publicArticleSeo, articleSeoHtml } from '@gitblogapp/core/seo';
 import { membershipStub } from "@gitblogapp/core/membership";
 import { voice, findAudio, rawAudio } from "@gitblogapp/core/speech";
@@ -225,7 +226,7 @@ function parsePost(file, source, locale, config, original) {
     category: data.category?.trim() || "Notes",
     tags: normalizeTags(data.tags),
     taxonomy: void 0,
-    cover,
+    cover: resolveCoverImage(cover),
     body,
     bodyExcerpt: createBodyExcerpt(body),
     ...rendered,
